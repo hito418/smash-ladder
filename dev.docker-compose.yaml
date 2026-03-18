@@ -1,0 +1,15 @@
+include:
+  - path: deps.docker-compose.yaml
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000 # solid
+      - 9432:9432 # solid vite hmr
+      - 4000:4000 # api
+    command: pnpm turbo dev
+    volumes:
+      - ./:/app

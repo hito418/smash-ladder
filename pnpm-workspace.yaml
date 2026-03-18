@@ -1,0 +1,13 @@
+packages:
+  - apps/*
+  - packages/*
+  - toolings/*
+
+catalog:
+  typescript: ^5.8.2
+  oxlint: ^1.1.0
+  pg: ^8.14.1
+  'solid-js': ^1.9.11
+  'lucide-solid': ^0.485.0
+  tailwindcss: ^4.2.2
+  postcss: ^8.5.8

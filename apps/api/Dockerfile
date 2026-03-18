@@ -1,0 +1,23 @@
+FROM node:24-alpine AS base
+RUN npm install -g corepack@latest && corepack enable
+
+FROM base AS prune
+WORKDIR /app
+RUN pnpm add -g turbo@^2
+COPY . .
+RUN turbo prune "@repo/api" --docker
+
+FROM base AS builder
+WORKDIR /app
+COPY --from=prune /app/out/json .
+RUN pnpm install --frozen-lockfile --ignore-scripts
+COPY --from=prune /app/out/full/ .
+RUN pnpm turbo run build
+
+FROM node:24-alpine AS runner
+WORKDIR /app
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 app
+USER app
+COPY --from=builder --chown=app:nodejs /app .
+CMD ["node", "apps/api/dist/main.mjs"]
