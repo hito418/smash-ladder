@@ -10,6 +10,15 @@ services:
       - 3000:3000 # solid
       - 9432:9432 # solid vite hmr
       - 4000:4000 # api
-    command: pnpm turbo dev
+      - 4983:4983 # drizzle-studio
+    environment:
+      - PG_HOST=db
+      - PG_PORT=5432
+      - PG_DB=postgres
+      - PG_USER=postgres
+      - PG_PASSWORD=postgres
+      - COOKIE_SECRET=value
+      - CORS_ORIGIN=http://localhost:3000
+    command: pnpm turbo dev --env-mode=loose
     volumes:
       - ./:/app
