@@ -6,9 +6,9 @@
   "scripts": {
     "lint": "oxlint -c oxlintrc.json src",
     "format": "prettier src --check",
-    "build": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
+    "build": "tailwindcss -i ./src/styles.css -o ./dist/styles.css",
     "check-types": "tsc --noEmit",
-    "dev": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch"
+    "dev": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch"
   },
   "peerDependencies": {
     "solid-js": "catalog:"
