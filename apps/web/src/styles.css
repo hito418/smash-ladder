@@ -1,2 +1,2 @@
 @import '@repo/ui/styles.css';
-@layer reset, base, tokens, recipes, utilities;
+@import 'tailwindcss';

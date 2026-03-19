@@ -21,11 +21,7 @@
   "devDependencies": {
     "@repo/oxlint-config": "workspace:*",
     "@repo/ts-config": "workspace:*",
-    "@tailwindcss/postcss": "^4.2.2",
-    "@tailwindcss/cli": "^4.2.2",
     "oxlint": "catalog:",
-    "postcss": "catalog:",
-    "tailwindcss": "catalog:",
     "typescript": "catalog:"
   },
   "files": [
@@ -38,8 +34,8 @@
       "import": "./src/index.ts"
     },
     "./styles.css": {
-      "source": "./dist/styles.css",
-      "import": "./dist/styles.css"
+      "source": "./src/styles.css",
+      "import": "./src/styles.css"
     },
     "./counter": {
       "types": "./src/Counter.tsx",

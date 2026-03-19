@@ -27,6 +27,8 @@
     "lucide-solid": "catalog:",
     "solid-js": "catalog:",
     "typescript": "catalog:",
+    "postcss": "catalog:",
+    "tailwindcss": "catalog:",
     "vite": "^6.2.3"
   },
   "engines": {
