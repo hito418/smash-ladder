@@ -8,8 +8,14 @@ export const Route = createRootRoute({
 function RootLayout() {
   return (
     <>
-      <Link to="/">Index</Link>
-      <Link to="/counter">Counter</Link>
+      <div class="flex gap-2">
+        <Link to="/counter" activeProps={{ class: 'bg-red-100' }}>
+          Counter
+        </Link>
+        <Link to="/" activeProps={{ class: 'bg-red-100' }}>
+          Index
+        </Link>
+      </div>
       <Suspense>
         <Outlet />
       </Suspense>
