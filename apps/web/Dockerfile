@@ -19,6 +19,9 @@ RUN turbo prune "@repo/web" --docker
 FROM base AS builder
 WORKDIR /app
 
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
 COPY --from=prune /app/out/json .
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
