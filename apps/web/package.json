@@ -11,9 +11,14 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "oxlint": "catalog:",
     "@repo/oxlint-config": "workspace:*",
     "@repo/ts-config": "workspace:*",
+    "@tailwindcss/postcss": "catalog:",
+    "oxlint": "catalog:",
+    "postcss": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "^6.2.3",
     "vite-plugin-solid": "^2.11.6",
     "vite-tsconfig-paths": "^5.1.4"
   },
@@ -21,15 +26,12 @@
     "@repo/schemas": "workspace:*",
     "@repo/ui": "workspace:*",
     "@solidjs/meta": "^0.29.4",
-    "@tanstack/router-plugin": "^1.112.13",
-    "@tanstack/solid-query": "^5.67.1",
-    "@tanstack/solid-router": "^1.112.12",
+    "@tanstack/router-plugin": "^1.166.14",
+    "@tanstack/solid-query": "^5.91.3",
+    "@tanstack/solid-router": "^1.167.5",
+    "arktype": "^2.2.0",
     "lucide-solid": "catalog:",
-    "solid-js": "catalog:",
-    "typescript": "catalog:",
-    "postcss": "catalog:",
-    "tailwindcss": "catalog:",
-    "vite": "^6.2.3"
+    "solid-js": "catalog:"
   },
   "engines": {
     "node": ">=23"
