@@ -65,7 +65,11 @@ describe('AuthService', () => {
     it('hashes the password before storing', async () => {
       const bcrypt = await import('bcrypt')
       mockDb.query.mockReturnValue(
-        okAsync({ id: 'user-1', username: 'alice', password: 'hashed_password' })
+        okAsync({
+          id: 'user-1',
+          username: 'alice',
+          password: 'hashed_password',
+        })
       )
 
       await service.registerUser('alice', 'mypassword')
@@ -98,7 +102,11 @@ describe('AuthService', () => {
     it('returns user credentials for valid login', async () => {
       const bcrypt = await import('bcrypt')
       mockDb.query.mockReturnValue(
-        okAsync({ id: 'user-1', username: 'alice', password: 'hashed_password' })
+        okAsync({
+          id: 'user-1',
+          username: 'alice',
+          password: 'hashed_password',
+        })
       )
 
       const result = await service.loginUser('alice', 'password123')
@@ -116,7 +124,11 @@ describe('AuthService', () => {
 
     it('only exposes id and username on successful login', async () => {
       mockDb.query.mockReturnValue(
-        okAsync({ id: 'user-1', username: 'alice', password: 'hashed_password' })
+        okAsync({
+          id: 'user-1',
+          username: 'alice',
+          password: 'hashed_password',
+        })
       )
 
       const result = await service.loginUser('alice', 'password123')
@@ -141,7 +153,11 @@ describe('AuthService', () => {
       vi.mocked(bcrypt.default.compare).mockResolvedValueOnce(false as never)
 
       mockDb.query.mockReturnValue(
-        okAsync({ id: 'user-1', username: 'alice', password: 'hashed_password' })
+        okAsync({
+          id: 'user-1',
+          username: 'alice',
+          password: 'hashed_password',
+        })
       )
 
       const result = await service.loginUser('alice', 'wrong')

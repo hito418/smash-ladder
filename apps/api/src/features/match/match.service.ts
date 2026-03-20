@@ -3,9 +3,18 @@ import { ResultAsync } from 'neverthrow'
 import { DbService } from 'src/shared/db-service'
 import { AppError } from 'src/shared/errors'
 import { logger } from 'src/shared/logger'
-import { CHARACTERS, STAGES, FIRST_BANNER_BANS, TOTAL_BANS } from './match.constants'
+import {
+  CHARACTERS,
+  STAGES,
+  FIRST_BANNER_BANS,
+  TOTAL_BANS,
+} from './match.constants'
 
-type MatchUpdateCallback = (data: { matchId: string; event: string; data?: unknown }) => void
+type MatchUpdateCallback = (data: {
+  matchId: string
+  event: string
+  data?: unknown
+}) => void
 
 type GameRow = {
   id: string
@@ -73,20 +82,32 @@ function formatGamePublic(game: GameRow, bans: BanRow[]) {
   }
 }
 
-function formatGameForUser(game: GameRow, bans: BanRow[], userId: string, match: MatchRow) {
+function formatGameForUser(
+  game: GameRow,
+  bans: BanRow[],
+  userId: string,
+  match: MatchRow
+) {
   const isPlayer1 = match.player1_id === userId
-  const hideOpponentPick = game.status === 'CHARACTER_SELECT' && game.game_number === 1
+  const hideOpponentPick =
+    game.status === 'CHARACTER_SELECT' && game.game_number === 1
 
   return {
     id: game.id,
     matchId: game.match_id,
     gameNumber: game.game_number,
-    player1Character: hideOpponentPick && !isPlayer1
-      ? (game.player1_character ? '???' : null)
-      : game.player1_character,
-    player2Character: hideOpponentPick && isPlayer1
-      ? (game.player2_character ? '???' : null)
-      : game.player2_character,
+    player1Character:
+      hideOpponentPick && !isPlayer1
+        ? game.player1_character
+          ? '???'
+          : null
+        : game.player1_character,
+    player2Character:
+      hideOpponentPick && isPlayer1
+        ? game.player2_character
+          ? '???'
+          : null
+        : game.player2_character,
     stage: game.stage,
     winnerId: game.winner_id,
     player1Report: game.player1_report,
@@ -128,7 +149,11 @@ export class MatchService {
 
   handleNotification(payload: string): void {
     try {
-      const data = JSON.parse(payload) as { matchId: string; event: string; data?: unknown }
+      const data = JSON.parse(payload) as {
+        matchId: string
+        event: string
+        data?: unknown
+      }
       const cbs = this.subscribers.get(data.matchId)
       if (!cbs) return
       for (const cb of cbs) {
@@ -206,14 +231,15 @@ export class MatchService {
         .execute()
 
       const gameIds = games.map((g) => g.id)
-      const bans = gameIds.length > 0
-        ? await db
-            .selectFrom('game_bans')
-            .selectAll()
-            .where('game_id', 'in', gameIds)
-            .orderBy('ban_order', 'asc')
-            .execute()
-        : []
+      const bans =
+        gameIds.length > 0
+          ? await db
+              .selectFrom('game_bans')
+              .selectAll()
+              .where('game_id', 'in', gameIds)
+              .orderBy('ban_order', 'asc')
+              .execute()
+          : []
 
       const matchRow = {
         id: match.id,
@@ -270,14 +296,15 @@ export class MatchService {
         .execute()
 
       const gameIds = games.map((g) => g.id)
-      const bans = gameIds.length > 0
-        ? await db
-            .selectFrom('game_bans')
-            .selectAll()
-            .where('game_id', 'in', gameIds)
-            .orderBy('ban_order', 'asc')
-            .execute()
-        : []
+      const bans =
+        gameIds.length > 0
+          ? await db
+              .selectFrom('game_bans')
+              .selectAll()
+              .where('game_id', 'in', gameIds)
+              .orderBy('ban_order', 'asc')
+              .execute()
+          : []
 
       return {
         id: match.id,
@@ -300,7 +327,7 @@ export class MatchService {
     character: string
   ): ResultAsync<{ success: true }, AppError> {
     return this.db.transaction(async (trx) => {
-      if (!CHARACTERS.includes(character as typeof CHARACTERS[number])) {
+      if (!CHARACTERS.includes(character as (typeof CHARACTERS)[number])) {
         return AppError.notFound('Character')
       }
 
@@ -399,7 +426,7 @@ export class MatchService {
     stage: string
   ): ResultAsync<{ success: true }, AppError> {
     return this.db.transaction(async (trx) => {
-      if (!STAGES.includes(stage as typeof STAGES[number])) {
+      if (!STAGES.includes(stage as (typeof STAGES)[number])) {
         return AppError.notFound('Stage')
       }
 
@@ -451,15 +478,13 @@ export class MatchService {
         return AppError.unauthorized('All bans already placed')
       }
 
-      const secondBannerId = firstBannerId === match.player1_id
-        ? match.player2_id
-        : match.player1_id
+      const secondBannerId =
+        firstBannerId === match.player1_id ? match.player2_id : match.player1_id
 
       let expectedBannerId: string
       if (isFirstGame) {
-        expectedBannerId = totalBans < FIRST_BANNER_BANS
-          ? firstBannerId
-          : secondBannerId
+        expectedBannerId =
+          totalBans < FIRST_BANNER_BANS ? firstBannerId : secondBannerId
       } else {
         // Games 2+: only the winner (first banner) bans
         expectedBannerId = firstBannerId
@@ -505,7 +530,7 @@ export class MatchService {
     stage: string
   ): ResultAsync<{ success: true }, AppError> {
     return this.db.transaction(async (trx) => {
-      if (!STAGES.includes(stage as typeof STAGES[number])) {
+      if (!STAGES.includes(stage as (typeof STAGES)[number])) {
         return AppError.notFound('Stage')
       }
 
@@ -649,11 +674,16 @@ export class MatchService {
             .where('status', '=', 'COMPLETED')
             .execute()
 
-          const p1Wins = completedGames.filter((g) => g.winner_id === match.player1_id).length
-          const p2Wins = completedGames.filter((g) => g.winner_id === match.player2_id).length
+          const p1Wins = completedGames.filter(
+            (g) => g.winner_id === match.player1_id
+          ).length
+          const p2Wins = completedGames.filter(
+            (g) => g.winner_id === match.player2_id
+          ).length
 
           if (p1Wins >= 2 || p2Wins >= 2) {
-            const matchWinner = p1Wins >= 2 ? match.player1_id : match.player2_id
+            const matchWinner =
+              p1Wins >= 2 ? match.player1_id : match.player2_id
             await trx
               .updateTable('matches')
               .set({
@@ -744,9 +774,8 @@ export class MatchService {
         return AppError.unauthorized('Match is not in progress')
       }
 
-      const opponentId = match.player1_id === userId
-        ? match.player2_id
-        : match.player1_id
+      const opponentId =
+        match.player1_id === userId ? match.player2_id : match.player1_id
 
       // Count current wins
       const completedGames = await trx

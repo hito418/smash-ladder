@@ -73,10 +73,7 @@ export class DbService {
   ): ResultAsync<PaginatedResult<T>, AppError> {
     return ResultAsync.fromPromise(
       this.db.transaction().execute(async (trx) => {
-        const [countRows, data] = await Promise.all([
-          countFn(trx),
-          dataFn(trx),
-        ])
+        const [countRows, data] = await Promise.all([countFn(trx), dataFn(trx)])
         const total = Number(countRows[0]?.count ?? 0)
         return { data, page, size, total, totalPages: Math.ceil(total / size) }
       }),
@@ -85,9 +82,7 @@ export class DbService {
   }
 
   transaction<T>(
-    fn: (
-      trx: ControlledTransaction<Database, []>
-    ) => Promise<T | AppError>
+    fn: (trx: ControlledTransaction<Database, []>) => Promise<T | AppError>
   ): ResultAsync<T, AppError> {
     return ResultAsync.fromPromise(
       (async () => {

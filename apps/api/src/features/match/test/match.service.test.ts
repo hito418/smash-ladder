@@ -192,7 +192,9 @@ describe('MatchService', () => {
     })
 
     it('returns NOT_FOUND for invalid character', async () => {
-      mockDb.transaction.mockReturnValue(errAsync(AppError.notFound('Character')))
+      mockDb.transaction.mockReturnValue(
+        errAsync(AppError.notFound('Character'))
+      )
 
       const result = await service.selectCharacter('m1', 'p1', 'InvalidChar')
 

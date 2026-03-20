@@ -11,7 +11,7 @@ export type AppErrorType =
 export class AppError extends Error {
   constructor(
     public readonly type: AppErrorType,
-    message: string,
+    message: string
   ) {
     super(message)
     this.name = 'AppError'

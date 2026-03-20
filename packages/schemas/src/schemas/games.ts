@@ -12,11 +12,15 @@ export const games = pgTable('games', {
   player1Character: text('player1_character'),
   player2Character: text('player2_character'),
   stage: text('stage'),
-  winnerId: uuid('winner_id').references(() => users.id, { onDelete: 'set null' }),
+  winnerId: uuid('winner_id').references(() => users.id, {
+    onDelete: 'set null',
+  }),
   player1Report: uuid('player1_report'),
   player2Report: uuid('player2_report'),
   status: text('status').notNull().default('CHARACTER_SELECT'),
-  firstBannerId: uuid('first_banner_id').references(() => users.id, { onDelete: 'set null' }),
+  firstBannerId: uuid('first_banner_id').references(() => users.id, {
+    onDelete: 'set null',
+  }),
   ...timestamps,
 })
 

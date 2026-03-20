@@ -5,17 +5,14 @@ export class ApiError extends Error {
 
   constructor(
     public status: number,
-    message: string,
+    message: string
   ) {
     super(message)
     Object.setPrototypeOf(this, new.target.prototype)
   }
 }
 
-export async function api<T>(
-  path: string,
-  options?: RequestInit,
-): Promise<T> {
+export async function api<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
     credentials: 'include',
     ...options,

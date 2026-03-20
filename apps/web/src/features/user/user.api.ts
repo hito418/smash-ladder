@@ -34,6 +34,5 @@ export type UserProfile = {
 }
 
 export const userApi = {
-  getProfile: (username: string) =>
-    api<UserProfile>(`/users/${username}`),
+  getProfile: (username: string) => api<UserProfile>(`/users/${username}`),
 }

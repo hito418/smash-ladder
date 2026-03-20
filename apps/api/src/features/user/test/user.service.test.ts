@@ -20,9 +20,7 @@ describe('UserService', () => {
         createdAt: new Date().toISOString(),
         sets: { wins: 5, losses: 3, total: 8, winRate: 63 },
         games: { wins: 12, losses: 7, total: 19, winRate: 63 },
-        topCharacters: [
-          { character: 'Mario', count: 8, percentage: 42 },
-        ],
+        topCharacters: [{ character: 'Mario', count: 8, percentage: 42 }],
         matches: [],
       }
       mockDb.query.mockReturnValue(okAsync(profile))

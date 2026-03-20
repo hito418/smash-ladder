@@ -64,9 +64,7 @@ export class SessionService {
         () => AppError.unauthorized('Invalid session')
       )
       .andThen(
-        DbService.guard(
-          AppError.databaseError('Failed to validate session')
-        )
+        DbService.guard(AppError.databaseError('Failed to validate session'))
       )
       .andThen((session) => {
         if (new Date(session.expires_at).valueOf() < Date.now()) {
@@ -84,11 +82,7 @@ export class SessionService {
   delete(sessionId: string): ResultAsync<void, AppError> {
     return this.db
       .query(
-        (db) =>
-          db
-            .deleteFrom('sessions')
-            .where('id', '=', sessionId)
-            .execute(),
+        (db) => db.deleteFrom('sessions').where('id', '=', sessionId).execute(),
         () => AppError.databaseError('Failed to delete session')
       )
       .map(() => undefined)
@@ -98,10 +92,7 @@ export class SessionService {
     return this.db
       .query(
         (db) =>
-          db
-            .deleteFrom('sessions')
-            .where('user_id', '=', userId)
-            .execute(),
+          db.deleteFrom('sessions').where('user_id', '=', userId).execute(),
         () => AppError.databaseError('Failed to delete user sessions')
       )
       .map(() => undefined)

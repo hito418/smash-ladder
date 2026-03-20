@@ -16,7 +16,10 @@ function ProfilePage() {
 
   return (
     <div class="mx-auto max-w-2xl space-y-6 p-6">
-      <Show when={profile.data} fallback={<p class="text-sm text-slate-500">Loading profile...</p>}>
+      <Show
+        when={profile.data}
+        fallback={<p class="text-sm text-slate-500">Loading profile...</p>}
+      >
         {(data) => <ProfileView profile={data()} />}
       </Show>
       <Show when={profile.isError}>
@@ -58,7 +61,9 @@ function ProfileView(props: { profile: UserProfile }) {
                     <span class="text-sm font-bold text-slate-500">
                       #{i() + 1}
                     </span>
-                    <span class="text-sm font-medium text-slate-200">{char.character}</span>
+                    <span class="text-sm font-medium text-slate-200">
+                      {char.character}
+                    </span>
                   </div>
                   <div class="flex items-center gap-3 text-sm">
                     <span class="text-slate-500">{char.count} games</span>
@@ -88,9 +93,7 @@ function ProfileView(props: { profile: UserProfile }) {
                   match.player1Username === props.profile.username
                 const won = () => {
                   if (match.status !== 'COMPLETED') return null
-                  const matchUserId = isP1()
-                    ? match.player1Id
-                    : match.player2Id
+                  const matchUserId = isP1() ? match.player1Id : match.player2Id
                   return match.winnerId === matchUserId
                 }
 

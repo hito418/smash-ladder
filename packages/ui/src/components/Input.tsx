@@ -16,7 +16,9 @@ const inputStyle = cva(
       },
       error: {
         true: ['border-red-500/50 focus:ring-red-500/20 focus:border-red-500'],
-        false: ['border-slate-700 focus:ring-cyan-500/20 focus:border-cyan-500'],
+        false: [
+          'border-slate-700 focus:ring-cyan-500/20 focus:border-cyan-500',
+        ],
       },
     },
     defaultVariants: {

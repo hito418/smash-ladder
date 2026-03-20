@@ -18,7 +18,10 @@ function MatchDetailsPage() {
 
   return (
     <div class="mx-auto max-w-2xl space-y-6 p-6">
-      <Show when={match.data} fallback={<p class="text-sm text-slate-500">Loading match...</p>}>
+      <Show
+        when={match.data}
+        fallback={<p class="text-sm text-slate-500">Loading match...</p>}
+      >
         {(data) => <MatchDetailsView match={data()} />}
       </Show>
       <Show when={match.isError}>
@@ -77,7 +80,10 @@ function MatchDetailsView(props: { match: MatchDetail }) {
   )
 }
 
-function Scoreboard(props: { match: MatchDetail; score: { p1: number; p2: number } }) {
+function Scoreboard(props: {
+  match: MatchDetail
+  score: { p1: number; p2: number }
+}) {
   return (
     <div class="flex items-center justify-center gap-6 rounded-lg border border-slate-700/50 bg-slate-800/80 px-8 py-6">
       <Link
@@ -110,7 +116,9 @@ function GameDetail(props: { game: Game; match: MatchDetail }) {
   return (
     <div class="rounded-lg border border-slate-700/50 bg-slate-800/60 p-3 text-sm space-y-2">
       <div class="flex items-center justify-between">
-        <span class="font-semibold text-slate-200">Game {props.game.gameNumber}</span>
+        <span class="font-semibold text-slate-200">
+          Game {props.game.gameNumber}
+        </span>
         <span
           class={`rounded px-1.5 py-0.5 text-xs font-medium ${
             props.game.status === 'COMPLETED'
@@ -156,7 +164,8 @@ function GameDetail(props: { game: Game; match: MatchDetail }) {
 
       <Show when={props.game.stage}>
         <p class="text-slate-500">
-          Stage: <span class="font-medium text-slate-400">{props.game.stage}</span>
+          Stage:{' '}
+          <span class="font-medium text-slate-400">{props.game.stage}</span>
         </p>
       </Show>
 

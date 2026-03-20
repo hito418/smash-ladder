@@ -11,7 +11,9 @@ export const matches = pgTable('matches', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   status: text('status').notNull().default('PENDING'),
-  winnerId: uuid('winner_id').references(() => users.id, { onDelete: 'set null' }),
+  winnerId: uuid('winner_id').references(() => users.id, {
+    onDelete: 'set null',
+  }),
   ...timestamps,
 })
 

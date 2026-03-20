@@ -114,9 +114,8 @@ export class MatchmakingService {
           .executeTakeFirstOrThrow()
 
         // Create first game — random first banner
-        const firstBannerId = Math.random() < 0.5
-          ? match.player1_id
-          : match.player2_id
+        const firstBannerId =
+          Math.random() < 0.5 ? match.player1_id : match.player2_id
         await trx
           .insertInto('games')
           .values({

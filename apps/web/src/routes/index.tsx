@@ -32,9 +32,7 @@ function HomePage() {
 
       <Show when={!me.data && !me.isLoading}>
         <div class="rounded-lg border border-slate-700/50 bg-slate-800/60 p-6 text-center space-y-3">
-          <p class="text-sm text-slate-400">
-            Log in to find matches and play.
-          </p>
+          <p class="text-sm text-slate-400">Log in to find matches and play.</p>
           <div class="flex justify-center gap-3">
             <Link to="/login">
               <Button>Login</Button>

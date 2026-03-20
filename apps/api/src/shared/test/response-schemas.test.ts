@@ -26,7 +26,9 @@ describe('dto', () => {
     const result = dto(TestSchema, { id: 123 })
     expect(result.isErr()).toBe(true)
     expect(result._unsafeUnwrapErr().type).toBe('INTERNAL_ERROR')
-    expect(result._unsafeUnwrapErr().message).toContain('Response schema mismatch')
+    expect(result._unsafeUnwrapErr().message).toContain(
+      'Response schema mismatch'
+    )
   })
 
   it('returns err when data is null', () => {

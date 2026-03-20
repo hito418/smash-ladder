@@ -37,9 +37,7 @@ export const queryClient = new QueryClient({
 
       queryClient.invalidateQueries({
         predicate: (query) =>
-          invalidates.some((queryKey) =>
-            matchQuery({ queryKey }, query)
-          ),
+          invalidates.some((queryKey) => matchQuery({ queryKey }, query)),
       })
     },
   }),

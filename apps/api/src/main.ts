@@ -20,12 +20,15 @@ const app = new Hono()
   .use(async (ctx, next) => {
     const start = Date.now()
     await next()
-    logger.info({
-      method: ctx.req.method,
-      path: ctx.req.path,
-      status: ctx.res.status,
-      duration: Date.now() - start,
-    }, `${ctx.req.method} ${ctx.req.path}`)
+    logger.info(
+      {
+        method: ctx.req.method,
+        path: ctx.req.path,
+        status: ctx.res.status,
+        duration: Date.now() - start,
+      },
+      `${ctx.req.method} ${ctx.req.path}`
+    )
   })
   .use(provide('sessionService', sessionService))
   .use(
@@ -70,8 +73,14 @@ if (process?.env?.NODE_ENV === 'DEV' || process?.env?.NODE_ENV === 'STAGING') {
 const pgListener = new PgListener()
 
 pgListener
-  .listen('match_found', (payload) => matchmakingService.handleNotification(payload))
-  .then(() => pgListener.listen('match_update', (payload) => matchService.handleNotification(payload)))
+  .listen('match_found', (payload) =>
+    matchmakingService.handleNotification(payload)
+  )
+  .then(() =>
+    pgListener.listen('match_update', (payload) =>
+      matchService.handleNotification(payload)
+    )
+  )
   .then(() => pgListener.connect())
   .then(() => logger.info('PgListener connected'))
   .catch((err) => logger.error(err, 'PgListener failed to start'))

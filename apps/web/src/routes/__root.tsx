@@ -19,7 +19,8 @@ import LogIn from 'lucide-solid/icons/log-in'
 import LogOut from 'lucide-solid/icons/log-out'
 import UserPlus from 'lucide-solid/icons/user-plus'
 
-const NAV_SHARED = 'flex items-center gap-3 rounded px-3 py-2 text-sm font-medium transition-colors'
+const NAV_SHARED =
+  'flex items-center gap-3 rounded px-3 py-2 text-sm font-medium transition-colors'
 const NAV_ACTIVE = 'bg-slate-800 text-cyan-400'
 const NAV_INACTIVE = 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
 

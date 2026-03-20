@@ -66,7 +66,10 @@ export class PgListener {
         await this.connect()
         logger.info('PgListener reconnected')
       } catch (err) {
-        logger.error({ err: (err as Error).message }, 'PgListener reconnect failed')
+        logger.error(
+          { err: (err as Error).message },
+          'PgListener reconnect failed'
+        )
         this.scheduleReconnect()
       }
     }, 3000)

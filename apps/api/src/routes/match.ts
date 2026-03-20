@@ -4,7 +4,10 @@ import { describeRoute, resolver } from 'hono-openapi'
 import { validator } from 'hono-openapi'
 import { type } from 'arktype'
 import { isAuth } from 'src/features/auth/auth.middleware'
-import { MatchDetailSchema, MatchListSchema } from 'src/features/match/match.dto'
+import {
+  MatchDetailSchema,
+  MatchListSchema,
+} from 'src/features/match/match.dto'
 import { dto, errResponse } from 'src/shared/response-schemas'
 import { errorToHttpStatus } from 'src/shared/errors'
 import { matchService } from 'src/container'
@@ -260,9 +263,7 @@ const matchRoute = new Hono()
     async (ctx) => {
       const userId = ctx.get('userPayload').sub.id
       const matchId = ctx.req.param('id')
-      const result = await ctx
-        .get('matchService')
-        .forfeit(matchId, userId)
+      const result = await ctx.get('matchService').forfeit(matchId, userId)
 
       if (result.isErr()) {
         return ctx.json(

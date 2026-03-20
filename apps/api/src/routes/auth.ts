@@ -53,9 +53,7 @@ const authRoute = new Hono()
         .get('auth')
         .registerUser(username, password)
         .andThen((credentials) =>
-          ctx
-            .get('sessionService')
-            .create(credentials.id, credentials.username)
+          ctx.get('sessionService').create(credentials.id, credentials.username)
         )
 
       if (result.isErr()) {
@@ -137,9 +135,7 @@ const authRoute = new Hono()
         .get('auth')
         .loginUser(username, password)
         .andThen((credentials) =>
-          ctx
-            .get('sessionService')
-            .create(credentials.id, credentials.username)
+          ctx.get('sessionService').create(credentials.id, credentials.username)
         )
 
       if (result.isErr()) {
@@ -170,8 +166,7 @@ const authRoute = new Hono()
     describeRoute({
       tags: ['Auth'],
       summary: 'Get current user',
-      description:
-        'Returns the current session payload if authenticated.',
+      description: 'Returns the current session payload if authenticated.',
       responses: {
         200: {
           description: 'Current session payload',

@@ -19,7 +19,12 @@ export type Game = {
   winnerId: string | null
   player1Report: string | null
   player2Report: string | null
-  status: 'CHARACTER_SELECT' | 'MAP_BAN' | 'STAGE_PICK' | 'RESULT_PENDING' | 'COMPLETED'
+  status:
+    | 'CHARACTER_SELECT'
+    | 'MAP_BAN'
+    | 'STAGE_PICK'
+    | 'RESULT_PENDING'
+    | 'COMPLETED'
   firstBannerId: string | null
   bans: GameBan[]
   created_at: string
@@ -54,8 +59,7 @@ export type MatchListItem = {
 export const matchApi = {
   list: () => api<MatchListItem[]>('/matches'),
 
-  getMatch: (matchId: string) =>
-    api<MatchDetail>(`/matches/${matchId}`),
+  getMatch: (matchId: string) => api<MatchDetail>(`/matches/${matchId}`),
 
   getMatchDetails: (matchId: string) =>
     api<MatchDetail>(`/matches/${matchId}/details`),

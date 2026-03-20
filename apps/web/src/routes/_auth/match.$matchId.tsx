@@ -77,7 +77,10 @@ function MatchPage() {
 
   return (
     <div class="mx-auto max-w-3xl space-y-6 p-6">
-      <Show when={match.data} fallback={<p class="text-sm text-slate-500">Loading match...</p>}>
+      <Show
+        when={match.data}
+        fallback={<p class="text-sm text-slate-500">Loading match...</p>}
+      >
         {(data) => <MatchView match={data()} />}
       </Show>
       <Show when={match.isError}>
@@ -257,7 +260,8 @@ function CharacterSelect(props: {
     <div class="space-y-4">
       <Show when={props.game.gameNumber > 1 && opponentPick()}>
         <p class="text-sm text-slate-400">
-          Opponent picked: <span class="font-semibold text-slate-200">{opponentPick()}</span>
+          Opponent picked:{' '}
+          <span class="font-semibold text-slate-200">{opponentPick()}</span>
         </p>
       </Show>
 
@@ -294,10 +298,7 @@ function CharacterPicker(props: {
   return (
     <div class="flex items-end gap-2">
       <div class="flex-1">
-        <label
-          for="character"
-          class="mb-1 block text-sm text-slate-400"
-        >
+        <label for="character" class="mb-1 block text-sm text-slate-400">
           Select your character
         </label>
         <select
@@ -517,7 +518,8 @@ function ResultPending(props: {
   return (
     <div class="space-y-4">
       <p class="text-sm text-slate-400">
-        Stage: <span class="font-semibold text-slate-200">{props.game.stage}</span>
+        Stage:{' '}
+        <span class="font-semibold text-slate-200">{props.game.stage}</span>
         <span class="mx-2 text-slate-600">|</span>
         {props.game.player1Character} vs {props.game.player2Character}
       </p>
@@ -647,7 +649,9 @@ function MatchComplete(props: { match: MatchDetail; userId: string }) {
     <div class="space-y-4">
       <div
         class={`rounded-lg border border-slate-700/50 bg-slate-800/80 p-8 text-center ${
-          iWon() ? 'border-t-2 border-t-emerald-500' : 'border-t-2 border-t-red-500'
+          iWon()
+            ? 'border-t-2 border-t-emerald-500'
+            : 'border-t-2 border-t-red-500'
         }`}
       >
         <h2
