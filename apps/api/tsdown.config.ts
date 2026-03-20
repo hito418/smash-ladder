@@ -5,5 +5,4 @@ export default defineConfig({
   minify: true,
   treeshake: true,
   outDir: 'dist',
-  noExternal: ['*'],
 })

@@ -124,6 +124,7 @@ const matchmakingRoute = new Hono()
     const userId = ctx.get('userPayload').sub.id
     const service = ctx.get('matchmaking')
 
+    ctx.header('X-Accel-Buffering', 'no')
     return streamSSE(ctx, async (stream) => {
       let running = true
 

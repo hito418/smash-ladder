@@ -28,7 +28,6 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 COPY --from=prune /app/out/full/ .
 RUN pnpm turbo run build
 
-FROM nginx:1.27.4-alpine AS runner
+FROM scratch
 
-COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
+COPY --from=builder /app/apps/web/dist .

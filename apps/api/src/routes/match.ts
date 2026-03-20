@@ -279,6 +279,7 @@ const matchRoute = new Hono()
     const matchId = ctx.req.param('id')
     const service = ctx.get('matchService')
 
+    ctx.header('X-Accel-Buffering', 'no')
     return streamSSE(ctx, async (stream) => {
       let running = true
 

@@ -3,6 +3,8 @@ RUN npm install -g corepack@latest && corepack enable
 
 FROM base AS prune
 WORKDIR /app
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 RUN pnpm add -g turbo@^2
 COPY . .
 RUN turbo prune "@repo/api" --docker
