@@ -31,8 +31,8 @@ function RegisterPage() {
   }
 
   return (
-    <div class="mx-auto max-w-sm space-y-6 pt-12">
-      <h1 class="text-2xl font-bold">Register</h1>
+    <div class="mx-auto max-w-sm space-y-6 p-6">
+      <h1 class="text-xl font-bold">Register</h1>
 
       <Show when={register.isError}>
         <Alert variant="error">
@@ -72,9 +72,9 @@ function RegisterPage() {
         </Button>
       </form>
 
-      <p class="text-sm">
+      <p class="text-sm text-slate-400">
         Already have an account?{' '}
-        <Link to="/login" class="text-amber-500 underline">
+        <Link to="/login" class="text-cyan-400 hover:text-cyan-300">
           Login
         </Link>
       </p>

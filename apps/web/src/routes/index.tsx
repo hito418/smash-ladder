@@ -23,19 +23,19 @@ function HomePage() {
   const me = createQuery(() => meQueryOptions())
 
   return (
-    <div class="mx-auto max-w-sm space-y-6 pt-12">
-      <h1 class="text-2xl font-bold">Smash Ladder</h1>
+    <div class="mx-auto max-w-xl space-y-6 p-6">
+      <h1 class="text-xl font-bold">Dashboard</h1>
 
       <Show when={me.data}>
         <Matchmaking />
       </Show>
 
       <Show when={!me.data && !me.isLoading}>
-        <div class="rounded border border-neutral-200 p-4 text-center space-y-2">
-          <p class="text-sm text-neutral-500">
+        <div class="rounded-lg border border-slate-700/50 bg-slate-800/60 p-6 text-center space-y-3">
+          <p class="text-sm text-slate-400">
             Log in to find matches and play.
           </p>
-          <div class="flex justify-center gap-2">
+          <div class="flex justify-center gap-3">
             <Link to="/login">
               <Button>Login</Button>
             </Link>
@@ -128,23 +128,21 @@ function Matchmaking() {
         {(data) => (
           <>
             <Show when={data().status === 'MATCHED'}>
-              <p>Redirecting to match...</p>
+              <p class="text-sm text-slate-400">Redirecting to match...</p>
             </Show>
 
             <Show when={data().status === 'IN_QUEUE'}>
-              <div class="rounded border border-amber-200 bg-amber-50 p-4 text-center">
-                <p class="font-semibold text-amber-700">
+              <div class="rounded-lg border border-cyan-500/30 bg-cyan-500/5 p-4 text-center space-y-3">
+                <p class="text-sm font-semibold text-cyan-400">
                   Searching for opponent...
                 </p>
-                <div class="mt-3">
-                  <Button
-                    color="secondary"
-                    disabled={leaveQueue.isPending}
-                    onClick={() => leaveQueue.mutate()}
-                  >
-                    {leaveQueue.isPending ? 'Leaving...' : 'Leave Queue'}
-                  </Button>
-                </div>
+                <Button
+                  color="secondary"
+                  disabled={leaveQueue.isPending}
+                  onClick={() => leaveQueue.mutate()}
+                >
+                  {leaveQueue.isPending ? 'Leaving...' : 'Leave Queue'}
+                </Button>
               </div>
             </Show>
 
@@ -170,18 +168,20 @@ function MatchList() {
 
   return (
     <div class="space-y-3">
-      <h2 class="text-lg font-bold">Matches</h2>
+      <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-500">
+        Matches
+      </h2>
 
       <Show when={matches.isLoading}>
-        <p class="text-sm text-neutral-500">Loading...</p>
+        <p class="text-sm text-slate-500">Loading...</p>
       </Show>
 
       <Show when={matches.data?.length === 0}>
-        <p class="text-sm text-neutral-500">No matches yet.</p>
+        <p class="text-sm text-slate-500">No matches yet.</p>
       </Show>
 
       <Show when={matches.data && matches.data.length > 0}>
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <For each={matches.data}>
             {(match) => {
               const isParticipant = () =>
@@ -194,10 +194,10 @@ function MatchList() {
                 <Link
                   to={isPlaying() ? '/match/$matchId' : '/matches/$matchId'}
                   params={{ matchId: match.id }}
-                  class="flex items-center justify-between rounded border border-neutral-200 px-3 py-2 text-sm hover:bg-neutral-50 transition-colors"
+                  class="flex items-center justify-between rounded-lg border border-slate-700/50 bg-slate-800/60 px-3 py-2.5 text-sm transition-colors hover:border-slate-600"
                 >
                   <div class="flex items-center gap-2">
-                    <span class="text-xs text-neutral-500">
+                    <span class="text-slate-300">
                       {match.player1Username} vs {match.player2Username}
                     </span>
                     <span
@@ -205,12 +205,12 @@ function MatchList() {
                         match.status === 'COMPLETED'
                           ? isParticipant()
                             ? iWon()
-                              ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-red-100 text-red-700'
-                            : 'bg-neutral-100 text-neutral-600'
+                              ? 'bg-emerald-500/20 text-emerald-400'
+                              : 'bg-red-500/20 text-red-400'
+                            : 'bg-slate-700/50 text-slate-400'
                           : match.status === 'IN_PROGRESS'
-                            ? 'bg-amber-100 text-amber-700'
-                            : 'bg-neutral-100 text-neutral-600'
+                            ? 'bg-amber-500/20 text-amber-400'
+                            : 'bg-slate-700/50 text-slate-400'
                       }`}
                     >
                       {match.status === 'COMPLETED'
@@ -224,7 +224,7 @@ function MatchList() {
                           : match.status}
                     </span>
                   </div>
-                  <span class="text-xs text-neutral-400">
+                  <span class="text-xs text-slate-500">
                     {new Date(match.created_at).toLocaleDateString()}
                   </span>
                 </Link>

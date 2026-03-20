@@ -4,7 +4,7 @@ import {
   createQuery,
   useQueryClient,
 } from '@tanstack/solid-query'
-import { createFileRoute } from '@tanstack/solid-router'
+import { createFileRoute, Link } from '@tanstack/solid-router'
 import { createSignal, For, Match, Show, Switch } from 'solid-js'
 import { meQueryOptions } from '../../features/auth/auth.queries'
 import type { Game, MatchDetail } from '../../features/match/match.api'
@@ -76,8 +76,8 @@ function MatchPage() {
   useMatchEvents(() => params().matchId)
 
   return (
-    <div class="mx-auto max-w-4xl space-y-6 p-4">
-      <Show when={match.data} fallback={<p>Loading match...</p>}>
+    <div class="mx-auto max-w-3xl space-y-6 p-6">
+      <Show when={match.data} fallback={<p class="text-sm text-slate-500">Loading match...</p>}>
         {(data) => <MatchView match={data()} />}
       </Show>
       <Show when={match.isError}>
@@ -105,16 +105,29 @@ function MatchView(props: { match: MatchDetail }) {
 
   return (
     <div class="space-y-6">
-      <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold">Match</h1>
-        <div class="text-lg font-mono">
-          <span class={isPlayer1() ? 'text-amber-500 font-bold' : ''}>
+      <div class="flex items-center justify-center gap-6 rounded-lg border border-slate-700/50 bg-slate-800/80 px-8 py-6">
+        <div class="flex-1 text-right">
+          <Link
+            to="/profile/$username"
+            params={{ username: props.match.player1Username }}
+            class={`text-xl font-bold transition-colors hover:text-cyan-400 ${isPlayer1() ? 'text-cyan-400' : 'text-slate-200'}`}
+          >
             {props.match.player1Username}
-          </span>{' '}
-          {score().p1} - {score().p2}{' '}
-          <span class={!isPlayer1() ? 'text-amber-500 font-bold' : ''}>
+          </Link>
+        </div>
+        <div class="flex items-center gap-3 font-mono text-4xl font-bold">
+          <span>{score().p1}</span>
+          <span class="text-slate-600">&mdash;</span>
+          <span>{score().p2}</span>
+        </div>
+        <div class="flex-1">
+          <Link
+            to="/profile/$username"
+            params={{ username: props.match.player2Username }}
+            class={`text-xl font-bold transition-colors hover:text-cyan-400 ${!isPlayer1() ? 'text-cyan-400' : 'text-slate-200'}`}
+          >
             {props.match.player2Username}
-          </span>
+          </Link>
         </div>
       </div>
 
@@ -148,12 +161,12 @@ function GamePhase(props: {
 }) {
   return (
     <div class="space-y-4">
-      <h2 class="text-lg font-semibold">
-        Game {props.game.gameNumber}
-        <span class="ml-2 text-sm font-normal text-neutral-500">
+      <div class="flex items-center gap-3">
+        <h2 class="text-lg font-semibold">Game {props.game.gameNumber}</h2>
+        <span class="rounded bg-slate-700/50 px-2 py-0.5 text-xs font-medium text-slate-400">
           {props.game.status.replace(/_/g, ' ')}
         </span>
-      </h2>
+      </div>
 
       <Switch>
         <Match when={props.game.status === 'CHARACTER_SELECT'}>
@@ -243,8 +256,8 @@ function CharacterSelect(props: {
   return (
     <div class="space-y-4">
       <Show when={props.game.gameNumber > 1 && opponentPick()}>
-        <p class="text-sm text-neutral-500">
-          Opponent picked: <span class="font-semibold">{opponentPick()}</span>
+        <p class="text-sm text-slate-400">
+          Opponent picked: <span class="font-semibold text-slate-200">{opponentPick()}</span>
         </p>
       </Show>
 
@@ -283,7 +296,7 @@ function CharacterPicker(props: {
       <div class="flex-1">
         <label
           for="character"
-          class="mb-1 block text-sm text-neutral-500"
+          class="mb-1 block text-sm text-slate-400"
         >
           Select your character
         </label>
@@ -292,7 +305,7 @@ function CharacterPicker(props: {
           value={selected()}
           onChange={(e) => setSelected(e.currentTarget.value)}
           disabled={props.isPending}
-          class="w-full rounded border border-neutral-300 bg-white px-3 py-2 text-sm"
+          class="w-full rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 outline-none transition-colors focus:border-cyan-500"
         >
           <option value="">Choose...</option>
           <For each={CHARACTERS}>
@@ -361,12 +374,12 @@ function MapBan(props: {
 
   return (
     <div class="space-y-4">
-      <p class="text-sm font-semibold">
+      <p class="text-sm font-semibold text-slate-300">
         Characters: {props.game.player1Character} vs{' '}
         {props.game.player2Character}
       </p>
 
-      <p class="text-sm text-neutral-500">
+      <p class="text-sm text-slate-400">
         {banPhaseLabel()}
         {myTurn() ? ' — Your turn to ban!' : ' — Waiting for opponent...'}
       </p>
@@ -375,19 +388,19 @@ function MapBan(props: {
         <Alert variant="error">{error()}</Alert>
       </Show>
 
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <For each={STAGES}>
           {(stage) => {
             const isBanned = () => bannedStages().includes(stage)
             return (
               <button
                 aria-label={isBanned() ? `${stage} (banned)` : `Ban ${stage}`}
-                class={`rounded border px-3 py-4 text-sm transition-colors ${
+                class={`rounded-lg border px-3 py-3 text-sm transition-colors ${
                   isBanned()
-                    ? 'border-neutral-200 bg-neutral-100 text-neutral-400 line-through'
+                    ? 'border-slate-700/50 bg-slate-800/30 text-slate-600 line-through'
                     : myTurn()
-                      ? 'border-neutral-300 hover:border-red-400 hover:bg-red-50 cursor-pointer'
-                      : 'border-neutral-300 cursor-default'
+                      ? 'border-slate-600 bg-slate-800/60 text-slate-300 cursor-pointer hover:border-red-500/50 hover:bg-red-500/10 hover:text-red-400'
+                      : 'border-slate-700/50 bg-slate-800/60 text-slate-400 cursor-default'
                 }`}
                 disabled={isBanned() || !myTurn() || ban.isPending}
                 onClick={() => ban.mutate(stage)}
@@ -429,12 +442,12 @@ function StagePick(props: { game: Game; match: MatchDetail; userId: string }) {
 
   return (
     <div class="space-y-4">
-      <p class="text-sm font-semibold">
+      <p class="text-sm font-semibold text-slate-300">
         Characters: {props.game.player1Character} vs{' '}
         {props.game.player2Character}
       </p>
 
-      <p class="text-sm text-neutral-500">
+      <p class="text-sm text-slate-400">
         {isPicker()
           ? `Pick a stage from the remaining ${remainingStages().length}!`
           : 'Waiting for opponent to pick a stage...'}
@@ -444,7 +457,7 @@ function StagePick(props: { game: Game; match: MatchDetail; userId: string }) {
         <Alert variant="error">{error()}</Alert>
       </Show>
 
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <For each={STAGES}>
           {(stage) => {
             const isBanned = () => bannedStages().includes(stage)
@@ -452,12 +465,12 @@ function StagePick(props: { game: Game; match: MatchDetail; userId: string }) {
             return (
               <button
                 aria-label={isBanned() ? `${stage} (banned)` : `Pick ${stage}`}
-                class={`rounded border px-3 py-4 text-sm transition-colors ${
+                class={`rounded-lg border px-3 py-3 text-sm transition-colors ${
                   isBanned()
-                    ? 'border-neutral-200 bg-neutral-100 text-neutral-400 line-through'
+                    ? 'border-slate-700/50 bg-slate-800/30 text-slate-600 line-through'
                     : isPicker() && isRemaining()
-                      ? 'border-emerald-300 bg-emerald-50 hover:border-emerald-500 hover:bg-emerald-100 cursor-pointer font-semibold'
-                      : 'border-neutral-300 cursor-default'
+                      ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300 cursor-pointer font-semibold hover:border-emerald-500/50 hover:bg-emerald-500/20'
+                      : 'border-slate-700/50 bg-slate-800/60 text-slate-400 cursor-default'
                 }`}
                 disabled={
                   isBanned() || !isPicker() || !isRemaining() || pick.isPending
@@ -503,8 +516,9 @@ function ResultPending(props: {
 
   return (
     <div class="space-y-4">
-      <p class="text-sm">
-        Stage: <span class="font-semibold">{props.game.stage}</span> |{' '}
+      <p class="text-sm text-slate-400">
+        Stage: <span class="font-semibold text-slate-200">{props.game.stage}</span>
+        <span class="mx-2 text-slate-600">|</span>
         {props.game.player1Character} vs {props.game.player2Character}
       </p>
 
@@ -524,7 +538,7 @@ function ResultPending(props: {
           <Alert variant="info">Waiting for opponent to report...</Alert>
         }
       >
-        <p class="font-semibold">Who won this game?</p>
+        <p class="font-semibold text-slate-200">Who won this game?</p>
         <div class="flex gap-3">
           <Button
             disabled={report.isPending}
@@ -557,12 +571,12 @@ function GameCompleted(props: {
   const iWon = () => props.game.winnerId === props.userId
 
   return (
-    <div class="rounded border border-neutral-200 p-3 text-sm">
-      <p>
+    <div class="rounded-lg border border-slate-700/50 bg-slate-800/60 p-3 text-sm">
+      <p class="text-slate-300">
         Game {props.game.gameNumber}: {props.game.player1Character} vs{' '}
         {props.game.player2Character} on {props.game.stage}
         {' — '}
-        <span class={iWon() ? 'text-emerald-600 font-bold' : 'text-red-500'}>
+        <span class={iWon() ? 'font-bold text-emerald-400' : 'text-red-400'}>
           {iWon() ? 'You won' : 'You lost'}
         </span>
       </p>
@@ -588,7 +602,7 @@ function ForfeitButton(props: { matchId: string }) {
   }))
 
   return (
-    <div class="border-t border-neutral-200 pt-4">
+    <div class="border-t border-slate-800 pt-4">
       <Show when={error()}>
         <Alert variant="error">{error()}</Alert>
       </Show>
@@ -596,7 +610,7 @@ function ForfeitButton(props: { matchId: string }) {
         when={confirming()}
         fallback={
           <button
-            class="text-sm text-red-500 hover:underline cursor-pointer"
+            class="cursor-pointer text-sm text-red-400 transition-colors hover:text-red-300"
             onClick={() => setConfirming(true)}
           >
             Forfeit match
@@ -604,7 +618,7 @@ function ForfeitButton(props: { matchId: string }) {
         }
       >
         <div class="flex items-center gap-3">
-          <span class="text-sm text-red-600">Are you sure?</span>
+          <span class="text-sm text-red-400">Are you sure?</span>
           <Button
             size="sm"
             color="primary"
@@ -614,7 +628,7 @@ function ForfeitButton(props: { matchId: string }) {
             {forfeit.isPending ? 'Forfeiting...' : 'Yes, forfeit'}
           </Button>
           <button
-            class="text-sm text-neutral-500 hover:underline cursor-pointer"
+            class="cursor-pointer text-sm text-slate-400 transition-colors hover:text-slate-300"
             onClick={() => setConfirming(false)}
           >
             Cancel
@@ -630,21 +644,19 @@ function MatchComplete(props: { match: MatchDetail; userId: string }) {
   const score = () => computeScore(props.match)
 
   return (
-    <div class="space-y-4 text-center">
+    <div class="space-y-4">
       <div
-        class={`rounded-lg p-8 ${
-          iWon()
-            ? 'bg-emerald-50 border border-emerald-200'
-            : 'bg-red-50 border border-red-200'
+        class={`rounded-lg border border-slate-700/50 bg-slate-800/80 p-8 text-center ${
+          iWon() ? 'border-t-2 border-t-emerald-500' : 'border-t-2 border-t-red-500'
         }`}
       >
         <h2
-          class={`text-3xl font-bold ${iWon() ? 'text-emerald-600' : 'text-red-500'}`}
+          class={`text-3xl font-bold ${iWon() ? 'text-emerald-400' : 'text-red-400'}`}
         >
-          {iWon() ? 'Victory!' : 'Defeat'}
+          {iWon() ? 'VICTORY' : 'DEFEAT'}
         </h2>
-        <p class="mt-2 text-lg font-mono">
-          {score().p1} - {score().p2}
+        <p class="mt-2 font-mono text-2xl text-slate-200">
+          {score().p1} &mdash; {score().p2}
         </p>
       </div>
 

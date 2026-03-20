@@ -15,8 +15,8 @@ function ProfilePage() {
   const profile = createQuery(() => profileQueryOptions(params().username))
 
   return (
-    <div class="mx-auto max-w-2xl space-y-6 p-4">
-      <Show when={profile.data} fallback={<p>Loading profile...</p>}>
+    <div class="mx-auto max-w-2xl space-y-6 p-6">
+      <Show when={profile.data} fallback={<p class="text-sm text-slate-500">Loading profile...</p>}>
         {(data) => <ProfileView profile={data()} />}
       </Show>
       <Show when={profile.isError}>
@@ -35,32 +35,34 @@ function ProfileView(props: { profile: UserProfile }) {
     <div class="space-y-6">
       <div>
         <h1 class="text-2xl font-bold">{props.profile.username}</h1>
-        <p class="text-sm text-neutral-500">
+        <p class="text-sm text-slate-500">
           Joined {new Date(props.profile.createdAt).toLocaleDateString()}
         </p>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-2 gap-3">
         <StatCard title="Sets" stats={props.profile.sets} />
         <StatCard title="Games" stats={props.profile.games} />
       </div>
 
       <Show when={props.profile.topCharacters.length > 0}>
         <div>
-          <h2 class="mb-2 text-lg font-semibold">Top Characters</h2>
-          <div class="space-y-2">
+          <h2 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
+            Top Characters
+          </h2>
+          <div class="space-y-1.5">
             <For each={props.profile.topCharacters}>
               {(char, i) => (
-                <div class="flex items-center justify-between rounded border border-neutral-200 px-3 py-2">
+                <div class="flex items-center justify-between rounded-lg border border-slate-700/50 bg-slate-800/60 px-3 py-2">
                   <div class="flex items-center gap-2">
-                    <span class="text-sm font-bold text-neutral-400">
+                    <span class="text-sm font-bold text-slate-500">
                       #{i() + 1}
                     </span>
-                    <span class="font-medium">{char.character}</span>
+                    <span class="text-sm font-medium text-slate-200">{char.character}</span>
                   </div>
-                  <div class="flex items-center gap-3 text-sm text-neutral-500">
-                    <span>{char.count} games</span>
-                    <span class="font-semibold text-neutral-700">
+                  <div class="flex items-center gap-3 text-sm">
+                    <span class="text-slate-500">{char.count} games</span>
+                    <span class="font-mono font-semibold text-slate-300">
                       {char.percentage}%
                     </span>
                   </div>
@@ -72,12 +74,14 @@ function ProfileView(props: { profile: UserProfile }) {
       </Show>
 
       <div>
-        <h2 class="mb-2 text-lg font-semibold">Match History</h2>
+        <h2 class="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
+          Match History
+        </h2>
         <Show
           when={props.profile.matches.length > 0}
-          fallback={<p class="text-sm text-neutral-500">No matches yet.</p>}
+          fallback={<p class="text-sm text-slate-500">No matches yet.</p>}
         >
-          <div class="space-y-2">
+          <div class="space-y-1.5">
             <For each={props.profile.matches}>
               {(match) => {
                 const isP1 = () =>
@@ -94,19 +98,19 @@ function ProfileView(props: { profile: UserProfile }) {
                   <Link
                     to="/matches/$matchId"
                     params={{ matchId: match.id }}
-                    class="flex items-center justify-between rounded border border-neutral-200 px-3 py-2 text-sm hover:bg-neutral-50 transition-colors"
+                    class="flex items-center justify-between rounded-lg border border-slate-700/50 bg-slate-800/60 px-3 py-2.5 text-sm transition-colors hover:border-slate-600"
                   >
                     <div class="flex items-center gap-2">
-                      <span class="text-neutral-500">
+                      <span class="text-slate-400">
                         {match.player1Username} vs {match.player2Username}
                       </span>
                       <span
                         class={`rounded px-1.5 py-0.5 text-xs font-medium ${
                           match.status === 'COMPLETED'
                             ? won()
-                              ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-red-100 text-red-700'
-                            : 'bg-amber-100 text-amber-700'
+                              ? 'bg-emerald-500/20 text-emerald-400'
+                              : 'bg-red-500/20 text-red-400'
+                            : 'bg-amber-500/20 text-amber-400'
                         }`}
                       >
                         {match.status === 'COMPLETED'
@@ -116,7 +120,7 @@ function ProfileView(props: { profile: UserProfile }) {
                           : 'In Progress'}
                       </span>
                     </div>
-                    <span class="text-xs text-neutral-400">
+                    <span class="text-xs text-slate-500">
                       {new Date(match.created_at).toLocaleDateString()}
                     </span>
                   </Link>
@@ -132,16 +136,18 @@ function ProfileView(props: { profile: UserProfile }) {
 
 function StatCard(props: { title: string; stats: StatBlock }) {
   return (
-    <div class="rounded-lg border border-neutral-200 p-4">
-      <h3 class="mb-2 text-sm font-semibold text-neutral-500">{props.title}</h3>
-      <div class="text-3xl font-bold">
+    <div class="rounded-lg border border-slate-700/50 bg-slate-800/60 p-4">
+      <h3 class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+        {props.title}
+      </h3>
+      <div class="font-mono text-3xl font-bold">
         {props.stats.winRate}
-        <span class="text-lg text-neutral-400">%</span>
+        <span class="text-lg text-slate-500">%</span>
       </div>
       <div class="mt-1 flex gap-3 text-sm">
-        <span class="text-emerald-600">{props.stats.wins}W</span>
-        <span class="text-red-500">{props.stats.losses}L</span>
-        <span class="text-neutral-400">{props.stats.total} total</span>
+        <span class="text-emerald-400">{props.stats.wins}W</span>
+        <span class="text-red-400">{props.stats.losses}L</span>
+        <span class="text-slate-500">{props.stats.total} total</span>
       </div>
     </div>
   )

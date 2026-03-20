@@ -17,8 +17,8 @@ function MatchDetailsPage() {
   const match = createQuery(() => matchDetailsQueryOptions(params().matchId))
 
   return (
-    <div class="mx-auto max-w-2xl space-y-6 p-4">
-      <Show when={match.data} fallback={<p>Loading match...</p>}>
+    <div class="mx-auto max-w-2xl space-y-6 p-6">
+      <Show when={match.data} fallback={<p class="text-sm text-slate-500">Loading match...</p>}>
         {(data) => <MatchDetailsView match={data()} />}
       </Show>
       <Show when={match.isError}>
@@ -43,33 +43,14 @@ function MatchDetailsView(props: { match: MatchDetail }) {
 
   return (
     <div class="space-y-6">
-      <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold">Match Details</h1>
-        <div class="text-lg font-mono">
-          <Link
-            to="/profile/$username"
-            params={{ username: props.match.player1Username }}
-            class="hover:underline"
-          >
-            {props.match.player1Username}
-          </Link>{' '}
-          {score().p1} - {score().p2}{' '}
-          <Link
-            to="/profile/$username"
-            params={{ username: props.match.player2Username }}
-            class="hover:underline"
-          >
-            {props.match.player2Username}
-          </Link>
-        </div>
-      </div>
+      <Scoreboard match={props.match} score={score()} />
 
       <div class="flex items-center gap-3">
         <span
-          class={`rounded px-2 py-1 text-sm font-medium ${
+          class={`rounded px-2 py-1 text-xs font-medium ${
             props.match.status === 'COMPLETED'
-              ? 'bg-neutral-100 text-neutral-600'
-              : 'bg-amber-100 text-amber-700'
+              ? 'bg-slate-700/50 text-slate-400'
+              : 'bg-amber-500/20 text-amber-400'
           }`}
         >
           {props.match.status === 'COMPLETED' ? 'Completed' : 'In Progress'}
@@ -78,7 +59,7 @@ function MatchDetailsView(props: { match: MatchDetail }) {
           <Link
             to="/match/$matchId"
             params={{ matchId: props.match.id }}
-            class="text-sm text-amber-600 hover:underline"
+            class="text-sm text-cyan-400 hover:text-cyan-300"
           >
             Go to match
           </Link>
@@ -86,7 +67,7 @@ function MatchDetailsView(props: { match: MatchDetail }) {
       </div>
 
       <Show when={props.match.games.length > 0}>
-        <div class="space-y-3">
+        <div class="space-y-2">
           <For each={props.match.games}>
             {(game) => <GameDetail game={game} match={props.match} />}
           </For>
@@ -96,19 +77,45 @@ function MatchDetailsView(props: { match: MatchDetail }) {
   )
 }
 
+function Scoreboard(props: { match: MatchDetail; score: { p1: number; p2: number } }) {
+  return (
+    <div class="flex items-center justify-center gap-6 rounded-lg border border-slate-700/50 bg-slate-800/80 px-8 py-6">
+      <Link
+        to="/profile/$username"
+        params={{ username: props.match.player1Username }}
+        class="flex-1 text-right text-xl font-bold text-slate-200 transition-colors hover:text-cyan-400"
+      >
+        {props.match.player1Username}
+      </Link>
+      <div class="flex items-center gap-3 font-mono text-4xl font-bold">
+        <span>{props.score.p1}</span>
+        <span class="text-slate-600">&mdash;</span>
+        <span>{props.score.p2}</span>
+      </div>
+      <Link
+        to="/profile/$username"
+        params={{ username: props.match.player2Username }}
+        class="flex-1 text-xl font-bold text-slate-200 transition-colors hover:text-cyan-400"
+      >
+        {props.match.player2Username}
+      </Link>
+    </div>
+  )
+}
+
 function GameDetail(props: { game: Game; match: MatchDetail }) {
   const winnerId = () => props.game.winnerId
   const winnerIsP1 = () => winnerId() === props.match.player1Id
 
   return (
-    <div class="rounded border border-neutral-200 p-3 text-sm space-y-2">
+    <div class="rounded-lg border border-slate-700/50 bg-slate-800/60 p-3 text-sm space-y-2">
       <div class="flex items-center justify-between">
-        <span class="font-semibold">Game {props.game.gameNumber}</span>
+        <span class="font-semibold text-slate-200">Game {props.game.gameNumber}</span>
         <span
           class={`rounded px-1.5 py-0.5 text-xs font-medium ${
             props.game.status === 'COMPLETED'
-              ? 'bg-neutral-100 text-neutral-600'
-              : 'bg-amber-100 text-amber-700'
+              ? 'bg-slate-700/50 text-slate-400'
+              : 'bg-amber-500/20 text-amber-400'
           }`}
         >
           {props.game.status.replace(/_/g, ' ')}
@@ -116,31 +123,31 @@ function GameDetail(props: { game: Game; match: MatchDetail }) {
       </div>
 
       <Show when={props.game.player1Character || props.game.player2Character}>
-        <div class="flex gap-4 text-neutral-600">
+        <div class="flex gap-4 text-slate-400">
           <span>
             <Link
               to="/profile/$username"
               params={{ username: props.match.player1Username }}
-              class="hover:underline"
+              class="hover:text-cyan-400"
             >
               {props.match.player1Username}
             </Link>
             :{' '}
-            <span class="font-medium">
+            <span class="font-medium text-slate-300">
               {props.game.player1Character ?? '—'}
             </span>
           </span>
-          <span>vs</span>
+          <span class="text-slate-600">vs</span>
           <span>
             <Link
               to="/profile/$username"
               params={{ username: props.match.player2Username }}
-              class="hover:underline"
+              class="hover:text-cyan-400"
             >
               {props.match.player2Username}
             </Link>
             :{' '}
-            <span class="font-medium">
+            <span class="font-medium text-slate-300">
               {props.game.player2Character ?? '—'}
             </span>
           </span>
@@ -148,8 +155,8 @@ function GameDetail(props: { game: Game; match: MatchDetail }) {
       </Show>
 
       <Show when={props.game.stage}>
-        <p class="text-neutral-500">
-          Stage: <span class="font-medium">{props.game.stage}</span>
+        <p class="text-slate-500">
+          Stage: <span class="font-medium text-slate-400">{props.game.stage}</span>
         </p>
       </Show>
 
@@ -163,7 +170,7 @@ function GameDetail(props: { game: Game; match: MatchDetail }) {
                 ? props.match.player1Username
                 : props.match.player2Username,
             }}
-            class="font-semibold text-emerald-600 hover:underline"
+            class="font-semibold text-emerald-400 hover:text-emerald-300"
           >
             {winnerIsP1()
               ? props.match.player1Username
@@ -173,7 +180,7 @@ function GameDetail(props: { game: Game; match: MatchDetail }) {
       </Show>
 
       <Show when={props.game.bans.length > 0}>
-        <div class="text-xs text-neutral-400">
+        <div class="text-xs text-slate-500">
           Bans: {props.game.bans.map((b) => b.stage).join(', ')}
         </div>
       </Show>
