@@ -2,6 +2,7 @@ import { sql } from 'kysely'
 import { ResultAsync } from 'neverthrow'
 import { DbService } from 'src/shared/db-service'
 import { AppError } from 'src/shared/errors'
+import { logger } from 'src/shared/logger'
 
 type MatchFoundCallback = (data: {
   matchId: string
@@ -52,7 +53,7 @@ export class MatchmakingService {
       notify(data.player1Id, data.player2Id)
       notify(data.player2Id, data.player1Id)
     } catch {
-      console.error('Invalid match_found payload:', payload)
+      logger.error({ payload }, 'Invalid match_found payload')
     }
   }
 
@@ -69,14 +70,14 @@ export class MatchmakingService {
         return AppError.alreadyExists('User already in queue')
       }
 
-      // Reject if user has a PENDING match
+      // Reject if user has an active match
       const pendingMatch = await trx
         .selectFrom('matches')
         .select('id')
         .where((eb) =>
           eb.or([eb('player1_id', '=', userId), eb('player2_id', '=', userId)])
         )
-        .where('status', '=', 'PENDING')
+        .where('status', 'in', ['PENDING', 'IN_PROGRESS'])
         .executeTakeFirst()
 
       if (pendingMatch) {
@@ -107,9 +108,24 @@ export class MatchmakingService {
           .values({
             player1_id: opponent.user_id,
             player2_id: userId,
+            status: 'IN_PROGRESS',
           })
           .returningAll()
           .executeTakeFirstOrThrow()
+
+        // Create first game — random first banner
+        const firstBannerId = Math.random() < 0.5
+          ? match.player1_id
+          : match.player2_id
+        await trx
+          .insertInto('games')
+          .values({
+            match_id: match.id,
+            game_number: 1,
+            status: 'CHARACTER_SELECT',
+            first_banner_id: firstBannerId,
+          })
+          .execute()
 
         // Notify via pg_notify
         await sql`
@@ -167,14 +183,14 @@ export class MatchmakingService {
         }
       }
 
-      // Check if has a pending match
+      // Check if has an active match
       const match = await db
         .selectFrom('matches')
         .select(['id', 'player1_id', 'player2_id'])
         .where((eb) =>
           eb.or([eb('player1_id', '=', userId), eb('player2_id', '=', userId)])
         )
-        .where('status', '=', 'PENDING')
+        .where('status', 'in', ['PENDING', 'IN_PROGRESS'])
         .executeTakeFirst()
 
       if (match) {

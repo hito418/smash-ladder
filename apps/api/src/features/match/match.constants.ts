@@ -1,0 +1,51 @@
+export const CHARACTERS = [
+  'Mario',
+  'Donkey Kong',
+  'Link',
+  'Samus',
+  'Yoshi',
+  'Kirby',
+  'Fox',
+  'Pikachu',
+  'Luigi',
+  'Ness',
+  'Captain Falcon',
+  'Jigglypuff',
+  'Peach',
+  'Bowser',
+  'Zelda',
+  'Sheik',
+  'Marth',
+  'Mr. Game & Watch',
+  'Meta Knight',
+  'Pit',
+  'Wario',
+  'Snake',
+  'Ike',
+  'Diddy Kong',
+  'Lucas',
+  'Sonic',
+  'Lucario',
+  'R.O.B.',
+  'Villager',
+  'Greninja',
+  'Palutena',
+  'Cloud',
+  'Joker',
+  'Steve',
+  'Kazuya',
+] as const
+
+export const STAGES = [
+  'Battlefield',
+  'Final Destination',
+  'Smashville',
+  'Town & City',
+  'Pokemon Stadium 2',
+  'Kalos Pokemon League',
+  'Hollow Bastion',
+] as const
+
+export const FIRST_BANNER_BANS = 3
+export const SECOND_BANNER_BANS = 2
+export const TOTAL_BANS = FIRST_BANNER_BANS + SECOND_BANNER_BANS

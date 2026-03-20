@@ -165,6 +165,33 @@ const authRoute = new Hono()
     }
   )
   .get(
+    '/me',
+    describeRoute({
+      tags: ['Auth'],
+      summary: 'Get current user',
+      description:
+        'Returns the current session payload if authenticated.',
+      responses: {
+        200: {
+          description: 'Current session payload',
+          content: {
+            'application/json': { schema: resolver(SessionPayloadSchema) },
+          },
+        },
+        401: errResponse('Missing or invalid session cookie'),
+      },
+    }),
+    isAuth(),
+    async (ctx) => {
+      const payload = ctx.get('userPayload')
+      return dto(SessionPayloadSchema, payload).match(
+        (data) => ctx.json(data, 200),
+        (error) =>
+          ctx.json({ message: error.message }, errorToHttpStatus(error))
+      )
+    }
+  )
+  .post(
     '/logout',
     describeRoute({
       tags: ['Auth'],
