@@ -4,14 +4,22 @@
     "build": {
       "dependsOn": [
         "^build"
-      ]
+      ],
+      "inputs": ["src/**", "tsconfig.json", "vite.config.ts"],
+      "outputs": ["dist/**"]
     },
     "dev": {
       "persistent": true
     },
-    "lint": {},
-    "format": {},
-    "typecheck": {}
+    "lint": {
+      "inputs": ["src/**"]
+    },
+    "format": {
+      "inputs": ["src/**"]
+    },
+    "typecheck": {
+      "inputs": ["src/**", "tsconfig.json"]
+    }
   },
   "remoteCache": {
     "enabled": false

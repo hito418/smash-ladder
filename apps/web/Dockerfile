@@ -27,8 +27,5 @@ RUN pnpm turbo run build
 
 FROM nginx:1.27.4-alpine AS runner
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 app
-USER app
-
-COPY --from=builder --chown=app:nodejs /app/apps/web/dist /var/www/html
+COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
