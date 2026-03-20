@@ -1,5 +1,6 @@
 import pkg from 'pg'
 import { env } from './env'
+import { logger } from './logger'
 
 const { Client } = pkg
 
@@ -39,7 +40,7 @@ export class PgListener {
     })
 
     this.client.on('error', (err) => {
-      console.error('PgListener error:', err.message)
+      logger.error({ err: err.message }, 'PgListener error')
       this.connected = false
       this.scheduleReconnect()
     })
@@ -63,9 +64,9 @@ export class PgListener {
       try {
         this.client = this.createClient()
         await this.connect()
-        console.log('PgListener reconnected')
+        logger.info('PgListener reconnected')
       } catch (err) {
-        console.error('PgListener reconnect failed:', (err as Error).message)
+        logger.error({ err: (err as Error).message }, 'PgListener reconnect failed')
         this.scheduleReconnect()
       }
     }, 3000)
