@@ -6,17 +6,14 @@
   "scripts": {
     "lint": "oxlint -c oxlintrc.json src",
     "format": "prettier src --check",
-    "build": "tailwindcss -i ./src/styles.css -o ./dist/styles.css",
-    "check-types": "tsc --noEmit",
-    "dev": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch"
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "solid-js": "catalog:"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
-    "lucide-solid": "catalog:",
-    "solid-js": "catalog:"
+    "lucide-solid": "catalog:"
   },
   "devDependencies": {
     "@repo/oxlint-config": "workspace:*",
@@ -24,9 +21,6 @@
     "oxlint": "catalog:",
     "typescript": "catalog:"
   },
-  "files": [
-    "dist"
-  ],
   "exports": {
     ".": {
       "source": "./src/index.ts",
@@ -37,9 +31,9 @@
       "source": "./src/styles.css",
       "import": "./src/styles.css"
     },
-    "./counter": {
-      "types": "./src/Counter.tsx",
-      "import": "./src/Counter.tsx"
+    "./*": {
+      "source": "./src/components/*",
+      "import": "./src/components/*"
     }
   }
 }
