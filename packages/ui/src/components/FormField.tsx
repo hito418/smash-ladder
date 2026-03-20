@@ -8,14 +8,14 @@ export const FormField = (props: {
   children: JSX.Element
 }) => {
   return (
-    <div class="space-y-1">
-      <label for={props.id} class="text-sm font-medium">
+    <div class="space-y-1.5">
+      <label for={props.id} class="text-sm font-medium text-slate-300">
         {props.label}
       </label>
       {props.children}
       <div aria-live="polite">
         <Show when={props.error}>
-          <p id={`${props.id}-error`} class="text-sm text-red-500">
+          <p id={`${props.id}-error`} class="text-xs text-red-400">
             {props.error}
           </p>
         </Show>

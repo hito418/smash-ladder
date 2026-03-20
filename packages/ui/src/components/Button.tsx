@@ -5,18 +5,18 @@ import { cva } from 'class-variance-authority'
 
 const buttonStyle = cva(
   [
-    'flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed rounded-md px-4 py-2 hover:opacity-80 transition-all duration-150 linear',
+    'flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed rounded px-4 py-2 font-medium transition-colors duration-150',
   ],
   {
     variants: {
       size: {
-        sm: ['text-sm'],
-        md: ['text-base'],
-        lg: ['text-lg'],
+        sm: ['text-xs px-3 py-1.5'],
+        md: ['text-sm'],
+        lg: ['text-base px-5 py-2.5'],
       },
       color: {
-        primary: ['bg-amber-600 text-white'],
-        secondary: ['bg-emerald-600 text-white'],
+        primary: ['bg-cyan-600 text-white hover:bg-cyan-500'],
+        secondary: ['bg-slate-700 text-slate-200 hover:bg-slate-600'],
       },
     },
     defaultVariants: {

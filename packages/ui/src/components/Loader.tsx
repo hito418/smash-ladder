@@ -7,7 +7,7 @@ export const Loader = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => {
   return (
     <LoaderCircle
       aria-label="Loading"
-      class={`animate-spin ${local.class ?? ''}`}
+      class={`animate-spin text-cyan-400 ${local.class ?? ''}`}
       {...rest}
     />
   )

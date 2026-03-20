@@ -5,18 +5,18 @@ import { cva } from 'class-variance-authority'
 
 const inputStyle = cva(
   [
-    'w-full rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all',
+    'w-full rounded border bg-slate-800 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 transition-colors duration-150',
   ],
   {
     variants: {
       size: {
-        sm: ['text-sm'],
-        md: ['text-base'],
-        lg: ['text-lg'],
+        sm: ['text-xs'],
+        md: ['text-sm'],
+        lg: ['text-base'],
       },
       error: {
-        true: ['border-red-500 focus:ring-red-500 focus:border-red-500'],
-        false: ['border-gray-300'],
+        true: ['border-red-500/50 focus:ring-red-500/20 focus:border-red-500'],
+        false: ['border-slate-700 focus:ring-cyan-500/20 focus:border-cyan-500'],
       },
     },
     defaultVariants: {
