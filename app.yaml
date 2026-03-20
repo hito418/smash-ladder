@@ -1,0 +1,25 @@
+runtime: custom
+env: flex
+
+service: default
+
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 1
+
+env_variables:
+  NODE_ENV: "PROD"
+  PG_HOST: "51.77.146.36"
+  PG_PORT: "9876"
+  PG_DB: "ladder-cloud"
+  PG_USER: "ladder-cloud-user"
+  PG_PASSWORD: "0xzmvik658z4utw0"
+  COOKIE_SECRET: "Cookie_Cookie"
+  COOKIE_DOMAIN: ".striffe.dev"
+  CORS_ORIGIN: "https://ladder-web.striffe.dev"
+  APP_PORT: "8080"
