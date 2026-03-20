@@ -2,6 +2,8 @@ import type { users } from './schemas/users'
 import type { sessions } from './schemas/sessions'
 import type { matchmakingQueue } from './schemas/matchmaking-queue'
 import type { matches } from './schemas/matches'
+import type { games } from './schemas/games'
+import type { gameBans } from './schemas/game-bans'
 import type { Kyselify } from 'drizzle-orm/kysely'
 
 export type Database = {
@@ -9,4 +11,6 @@ export type Database = {
   sessions: Kyselify<typeof sessions>
   matchmaking_queue: Kyselify<typeof matchmakingQueue>
   matches: Kyselify<typeof matches>
+  games: Kyselify<typeof games>
+  game_bans: Kyselify<typeof gameBans>
 }
