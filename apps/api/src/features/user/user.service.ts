@@ -31,9 +31,6 @@ export class UserService {
       const setWins = matches.filter((m) => m.winner_id === userId).length
       const setLosses = matches.length - setWins
 
-      // All games from matches involving this user
-      const matchIds = matches.map((m) => m.id)
-
       // Also include in-progress matches for game stats
       const allMatches = await db
         .selectFrom('matches')
@@ -82,9 +79,8 @@ export class UserService {
       let totalPicks = 0
       for (const game of games) {
         const role = matchPlayerMap.get(game.match_id)
-        const character = role === 'p1'
-          ? game.player1_character
-          : game.player2_character
+        const character =
+          role === 'p1' ? game.player1_character : game.player2_character
         if (character) {
           charCounts.set(character, (charCounts.get(character) ?? 0) + 1)
           totalPicks++
@@ -97,9 +93,8 @@ export class UserService {
         .map(([character, count]) => ({
           character,
           count,
-          percentage: totalPicks > 0
-            ? Math.round((count / totalPicks) * 100)
-            : 0,
+          percentage:
+            totalPicks > 0 ? Math.round((count / totalPicks) * 100) : 0,
         }))
 
       // Recent matches with usernames
@@ -133,17 +128,17 @@ export class UserService {
           wins: setWins,
           losses: setLosses,
           total: matches.length,
-          winRate: matches.length > 0
-            ? Math.round((setWins / matches.length) * 100)
-            : 0,
+          winRate:
+            matches.length > 0
+              ? Math.round((setWins / matches.length) * 100)
+              : 0,
         },
         games: {
           wins: gameWins,
           losses: gameLosses,
           total: games.length,
-          winRate: games.length > 0
-            ? Math.round((gameWins / games.length) * 100)
-            : 0,
+          winRate:
+            games.length > 0 ? Math.round((gameWins / games.length) * 100) : 0,
         },
         topCharacters,
         matches: recentMatches.map((m) => ({
