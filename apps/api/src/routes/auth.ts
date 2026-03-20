@@ -15,6 +15,7 @@ const SESSION_COOKIE_OPTIONS = {
   secure: env.NODE_ENV !== 'DEV',
   sameSite: env.NODE_ENV === 'STAGING' ? ('None' as const) : ('Lax' as const),
   path: '/',
+  ...(env.COOKIE_DOMAIN && { domain: env.COOKIE_DOMAIN }),
 }
 
 const authRoute = new Hono()
@@ -212,7 +213,10 @@ const authRoute = new Hono()
         await ctx.get('sessionService').delete(sessionId)
       }
 
-      deleteCookie(ctx, 'session_id')
+      deleteCookie(ctx, 'session_id', {
+        path: '/',
+        ...(env.COOKIE_DOMAIN && { domain: env.COOKIE_DOMAIN }),
+      })
       return ctx.json({ success: true }, 200)
     }
   )

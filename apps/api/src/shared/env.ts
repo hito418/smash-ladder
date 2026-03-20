@@ -7,6 +7,7 @@ const envSchema = type({
   PG_USER: 'string',
   PG_PASSWORD: 'string',
   COOKIE_SECRET: 'string',
+  COOKIE_DOMAIN: 'string | undefined',
   CORS_ORIGIN: 'string',
   APP_PORT: 'string.numeric.parse = "4000"',
   PAGE_SIZE: 'string.numeric.parse = "15"',
